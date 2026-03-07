@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function LoginForm({
@@ -21,8 +21,10 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const error = searchParams.get("error");
 
   const handleSignIn = async (provider: string) => {
     setIsLoading(true);

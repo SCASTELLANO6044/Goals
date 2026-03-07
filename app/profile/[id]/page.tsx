@@ -10,6 +10,7 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export default async function UserProfile({
   params,
@@ -72,6 +73,8 @@ export default async function UserProfile({
           <a href="">Register New Goal</a>
         </Button>
       )}
+
+      <SignOutButton />
 
       {/* Goals Navigation */}
       <Tabs defaultValue="goals" className="w-full">
