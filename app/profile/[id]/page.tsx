@@ -18,6 +18,7 @@ export default async function UserProfile({
   params: Promise<{ id: string }>;
 }) {
   const param = await params;
+  const name = decodeURIComponent(param.id);
   const mockGoals = [
     {
       id: 1,
@@ -52,12 +53,12 @@ export default async function UserProfile({
             <Avatar className="h-16 w-16">
               <AvatarImage src="/assets/welcome_image.png" />
               <AvatarFallback>
-                {param.id.charAt(0).toUpperCase()}
+                {name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
               <div className="flex justify-between">
-                <CardTitle className="text-2xl">@{param.id}</CardTitle>
+                <CardTitle className="text-2xl">@{name}</CardTitle>
               </div>
               <CardDescription>User Bio</CardDescription>
             </div>
