@@ -58,7 +58,7 @@ export default async function UserProfile({
             </Avatar>
             <div>
               <div className="flex justify-between">
-                <CardTitle className="text-2xl">@{name}</CardTitle>
+                <CardTitle className="text-2xl">{name}</CardTitle>
               </div>
               <CardDescription>User Bio</CardDescription>
             </div>
