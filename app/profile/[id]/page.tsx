@@ -82,7 +82,7 @@ export default async function UserProfile({
         <TabsContent value="goals">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {mockGoals.map((goal) => (
-              <Card key="" className="flex flex-col h-full">
+              <Card key={goal.id} className="flex flex-col h-full">
                 {/* Imagen rectangular que ocupa la parte superior */}
                 <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
                   <Image
