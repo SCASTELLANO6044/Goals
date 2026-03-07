@@ -58,7 +58,6 @@ export default async function UserProfile({
             <div>
               <div className="flex justify-between">
                 <CardTitle className="text-2xl">@{param.id}</CardTitle>
-                <CardTitle className="text-2xl ml-5">Name</CardTitle>
               </div>
               <CardDescription>User Bio</CardDescription>
             </div>
