@@ -13,26 +13,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { signinWithGoogle } from "@/lib/actions"
 
-import { signIn } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
-
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const error = searchParams.get("error");
-
-  const handleSignIn = async (provider: string) => {
-    setIsLoading(true);
-    await signIn(provider, { redirect: true, callbackUrl: "/" });
-  };
-
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">

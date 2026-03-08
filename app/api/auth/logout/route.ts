@@ -1,6 +1,0 @@
-import { signOut } from "next-auth/react";
-import { NextRequest, NextResponse } from "next/server";
-
-export async function POST(request: NextRequest) {
-  return NextResponse.redirect(new URL("/login", request.url));
-}
