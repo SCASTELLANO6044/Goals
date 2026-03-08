@@ -10,7 +10,7 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { SignOutButton } from "@/components/sign-out-button";
+import { signOut } from "@/lib/actions";
 
 export default async function UserProfile({
   params,
@@ -74,7 +74,12 @@ export default async function UserProfile({
         </Button>
       )}
 
-      <SignOutButton />
+      {/* Provisional Sign-out Button (Conditional) */}
+      <form action={signOut}>
+        <button className='btn' type='submit'>
+          Sign Out
+        </button>
+      </form>
 
       {/* Goals Navigation */}
       <Tabs defaultValue="goals" className="w-full">

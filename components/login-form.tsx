@@ -11,6 +11,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { signinWithGoogle } from "@/lib/actions"
 
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -85,8 +86,7 @@ export function LoginForm({
                 <Button 
                   variant="outline" 
                   type="button"
-                  onClick={() => handleSignIn("google")}
-                  disabled={isLoading}
+                  onClick={() => signinWithGoogle()}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path

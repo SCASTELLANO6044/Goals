@@ -1,51 +1,33 @@
 "use client";
 
 import { Hero47 } from "@/components/hero47";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { createClientForServer } from "@/lib/supabase/server";
+import { redirect } from 'next/navigation';
 
-export default function HomePage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
 
-  useEffect(() => {
-    if (session) {
-      const name = session.user?.name || "User";``
-      router.push("/profile/" + encodeURIComponent(name));
-    }
-  }, [session, router]);
+export default async function Home() {
+  const supabase = createClientForServer();
+  const session = await (await supabase).auth.getUser();
 
-  if (status === "loading") {
+  if (!session.data.user){
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-black">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-zinc-900 dark:border-white"></div>
-          <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-            Loading...
-          </p>
-        </div>
+      <div>
+        <Hero47 />
       </div>
     );
   }
 
-  if (session) {
-    // Show loading while redirecting
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-black">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-zinc-900 dark:border-white"></div>
-          <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-            Redirecting to profile...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const {
+    data: {
+      user: { user_metadata, app_metadata },
+    },
+  } = session
 
-  return (
-    <div>
-      <Hero47 />
-    </div>
-  );
+  const { name, email, user_name, avatar_url } = user_metadata
+
+  const userName = user_name ? `@${user_name}` : 'User Name Not Set'
+
+  console.log(session)
+
+  redirect('/profile/' + userName);
 }
