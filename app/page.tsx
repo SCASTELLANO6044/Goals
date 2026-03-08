@@ -1,3 +1,5 @@
+"use client";
+
 import { Hero47 } from "@/components/hero47";
 import { createClientForServer } from "@/lib/supabase/server";
 import { redirect } from 'next/navigation';
