@@ -1,5 +1,7 @@
 "use client"
 
+import { useActionState } from "react"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -11,17 +13,22 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { signinWithGoogle } from "@/lib/actions"
+import { signinWithGoogle, signinWithEmailPassword } from "@/lib/actions"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [state, formAction, isPending] = useActionState(signinWithEmailPassword as any, {
+    success: null,
+    error: null,
+  } as any)
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" suppressHydrationWarning={true}>
+          <form action={formAction} className="p-6 md:p-8" suppressHydrationWarning={true}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -33,6 +40,7 @@ export function LoginForm({
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -49,10 +57,25 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required suppressHydrationWarning={true} />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  suppressHydrationWarning={true}
+                />
               </Field>
+              
+              {state?.error && (
+                <div className="text-destructive text-sm text-center font-medium">
+                  {state.error}
+                </div>
+              )}
+
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? "Logging in..." : "Login"}
+                </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
