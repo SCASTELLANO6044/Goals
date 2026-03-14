@@ -51,7 +51,7 @@ export function LoginForm({
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <a
-                    href="#"
+                    href="/reset"
                     className="ml-auto text-sm underline-offset-2 hover:underline"
                   >
                     Forgot your password?
@@ -65,7 +65,7 @@ export function LoginForm({
                   suppressHydrationWarning={true}
                 />
               </Field>
-              
+
               {state?.error && (
                 <div className="text-destructive text-sm text-center font-medium">
                   {state.error}
@@ -90,8 +90,8 @@ export function LoginForm({
                   </svg>
                   <span className="sr-only">Login with Apple</span>
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   type="button"
                   onClick={() => signinWithGoogle()}
                 >
