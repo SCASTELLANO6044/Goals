@@ -7,7 +7,7 @@ export default async function Home() {
   const supabase = createClientForServer();
   const session = await (await supabase).auth.getUser();
 
-  if (!session.data.user){
+  if (!session.data.user) {
     return (
       <div>
         <Hero47 />
@@ -24,8 +24,6 @@ export default async function Home() {
   const { name, email, user_name, avatar_url } = user_metadata
 
   const userName = user_name ? `@${user_name}` : 'User Name Not Set'
-
-  console.log(session)
 
   redirect('/profile/' + userName);
 }
