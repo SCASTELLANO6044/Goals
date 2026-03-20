@@ -11,35 +11,33 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { signOut } from "@/lib/actions";
+import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
+import { QueryData } from "@supabase/supabase-js";
 
 export default async function UserProfile({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const supabase = await createClient(cookies());
+  const { data } = await supabase.auth.getUser();
+  const user = data.user;
+  const name = user?.user_metadata?.full_name ?? "Anonymous";
   const param = await params;
-  const name = decodeURIComponent(param.id);
-  const mockGoals = [
-    {
-      id: 1,
-      title: "Run a Marathon",
-      status: "approved",
-      description: "Completed NYC Marathon 2023",
-      attachmentUrl: "/file.svg",
-    },
-    {
-      id: 2,
-      title: "Learn Next.js",
-      status: "pending",
-      description: "Built this GOALS app",
-    },
-    {
-      id: 3,
-      title: "Jump in parachute",
-      status: "approved",
-      description: "Built this GOALS app",
-    },
-  ];
+  const goalsByUserQuery = supabase
+    .from("goals")
+    .select(`
+    *,
+    nm_users_goals!inner (
+      users_id
+    )
+  `)
+    .eq("nm_users_goals.users_id", "b9308e28-3742-44e7-a115-c0ce45a4191f");
+  type GoalsByUser = QueryData<typeof goalsByUserQuery>;
+
+  const { data: goals, error } = await goalsByUserQuery;
+  if (error) throw error;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -86,7 +84,7 @@ export default async function UserProfile({
         {/* Goals Tab */}
         <TabsContent value="goals">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mockGoals.map((goal) => (
+            {goals?.map((goal) => (
               <Card key={goal.id} className="flex flex-col h-full">
                 {/* Imagen rectangular que ocupa la parte superior */}
                 <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
