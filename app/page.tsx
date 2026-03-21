@@ -23,7 +23,7 @@ export default async function Home() {
 
   const { email } = user_metadata
 
-  const userName = email ? `@${email}` : 'User Name Not Set'
+  const userName = email ? `${email}` : 'User Name Not Set'
 
   redirect('/profile/' + userName);
 }
