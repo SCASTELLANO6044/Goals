@@ -71,7 +71,7 @@ export default async function UserProfile({
       {true /* Replace with auth check */ && (
         <Button className="mb-6 py-10 w-full text-2xl" asChild>
           {/*<a href={`/${param.id}/register-goal`}>Register New Goal</a>*/}
-          <a href="">Register New Goal</a>
+          <a href={`/profile/${email}/register-goal`}>Register New Goal</a>
         </Button>
       )}
 
