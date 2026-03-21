@@ -23,7 +23,10 @@ export default async function UserProfile({
   const supabase = await createClient(cookies());
   const { data } = await supabase.auth.getUser();
   const user = data.user;
+  console.log(user);
   const name = user?.user_metadata?.full_name ?? "Anonymous";
+  const avatar_url = user?.user_metadata?.avatar_url ?? "";
+  const email = user?.email ?? "";
   const param = await params;
   const goalsByUserQuery = supabase
     .from("goals")
@@ -49,7 +52,7 @@ export default async function UserProfile({
         <Card className="mt-3">
           <CardHeader className="flex flex-row items-center gap-4">
             <Avatar className="h-16 w-16">
-              <AvatarImage src="/assets/welcome_image.png" />
+              <AvatarImage src={avatar_url} />
               <AvatarFallback>
                 {name.charAt(0).toUpperCase()}
               </AvatarFallback>

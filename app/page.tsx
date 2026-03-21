@@ -21,9 +21,9 @@ export default async function Home() {
     },
   } = session
 
-  const { name, email, user_name, avatar_url } = user_metadata
+  const { email } = user_metadata
 
-  const userName = user_name ? `@${user_name}` : 'User Name Not Set'
+  const userName = email ? `@${email}` : 'User Name Not Set'
 
   redirect('/profile/' + userName);
 }
