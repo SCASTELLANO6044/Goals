@@ -36,11 +36,33 @@ export default async function UserProfile({
       users_id
     )
   `)
-    .eq("nm_users_goals.users_id", "b9308e28-3742-44e7-a115-c0ce45a4191f");
+    .eq("nm_users_goals.users_id", user?.id);
   type GoalsByUser = QueryData<typeof goalsByUserQuery>;
 
   const { data: goals, error } = await goalsByUserQuery;
   if (error) throw error;
+
+  const goalsWithImages = await Promise.all(
+    goals?.map(async (goal) => {
+      if (!goal.path) {
+        return { ...goal, image_url: null };
+      }
+
+      const { data, error } = await supabase.storage
+        .from("images")
+        .createSignedUrl(goal.path, 60 * 60);
+
+      if (error) {
+        console.error(error);
+        return { ...goal, image_url: null };
+      }
+
+      return {
+        ...goal,
+        image_url: data.signedUrl,
+      };
+    }) || []
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -87,12 +109,12 @@ export default async function UserProfile({
         {/* Goals Tab */}
         <TabsContent value="goals">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {goals?.map((goal) => (
+            {goalsWithImages?.map((goal) => (
               <Card key={goal.id} className="flex flex-col h-full">
-                {/* Imagen rectangular que ocupa la parte superior */}
                 <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
                   <Image
-                    src="/assets/welcome_image.png"
+                    src={goal.image_url || "/assets/Goals-logo.png"}
+                    loading="eager"
                     alt={goal.title}
                     fill
                     className="object-cover"
