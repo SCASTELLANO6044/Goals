@@ -89,19 +89,11 @@ export default async function UserProfile({
         </Card>
       </div>
 
-      {/* Register Goal Button (Conditional) */}
-      {true /* Replace with auth check */ && (
-        <Button className="mb-6 py-10 w-full text-2xl" asChild>
-          {/*<a href={`/${param.id}/register-goal`}>Register New Goal</a>*/}
-          <a href={`/profile/${email}/register-goal`}>Register New Goal</a>
-        </Button>
-      )}
-
       {/* Provisional Sign-out Button (Conditional) */}
       <form action={signOut}>
-        <button className='btn' type='submit'>
+        <Button className='mb-3 py-5 w-1/8 text-xl' type='submit'>
           Sign Out
-        </button>
+        </Button>
       </form>
 
       {/* Goals Navigation */}
