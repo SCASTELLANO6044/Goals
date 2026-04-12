@@ -125,11 +125,13 @@ export default async function UserProfile({
                   </CardContent>
                 </div>
                 {/* Footer de la Card (opcional) */}
+                {/*
                 <div className="p-4 pt-0">
                   <Button variant="outline" className="w-full mt-2">
                     View Details
                   </Button>
                 </div>
+                */}
               </Card>
             ))}
           </div>
