@@ -86,12 +86,6 @@ export default async function UserProfile({
         </Card>
       </div>
 
-      {/* Provisional Sign-out Button (Conditional) */}
-      <form action={signOut}>
-        <Button className='mb-3 py-5 w-1/8 text-xl' type='submit'>
-          Sign Out
-        </Button>
-      </form>
 
       {/* Goals Navigation */}
       <Tabs defaultValue="goals" className="w-full">
