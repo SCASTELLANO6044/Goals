@@ -34,6 +34,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
             }
 
             gsap.set(content, { y: -current });
+            document.documentElement.style.setProperty('--scroll-y', `${current}px`);
             ScrollTrigger.update();
             rafId = requestAnimationFrame(smoothScroll);
         };

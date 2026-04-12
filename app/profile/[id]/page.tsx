@@ -65,11 +65,8 @@ export default async function UserProfile({
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div
-        className="container mx-auto py-8 relative"
-        style={{ paddingInlineStart: 0, paddingInlineEnd: 0 }}
-      >
+    <div className="w-full py-8">
+      <div className="py-8 relative">
         {/* Header Section */}
         <Card className="mt-3">
           <CardHeader className="flex flex-row items-center gap-4">
