@@ -1,7 +1,7 @@
+import { SettingsProfile1 } from "@/components/settings-profile1";
+
 export default function SettingsPage() {
     return (
-        <div>
-            <h1>Settings</h1>
-        </div>
+        <SettingsProfile1 className="mx-auto" />
     )
 }
