@@ -13,9 +13,26 @@ import {
 import { usePathname } from "next/navigation"
 import { LogOut, Home, Settings, PlusCircle } from "lucide-react"
 import { signOut } from "@/lib/actions"
+import { useEffect, useState } from "react"
+import { createClient } from "@/lib/supabase/client"
 
 export function AppSidebar() {
     const pathname = usePathname()
+    const [email, setEmail] = useState<string | null>(null)
+    const supabase = createClient()
+
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+                setEmail(user.user_metadata?.email || user.email || null)
+            }
+        }
+        getUser()
+    }, [supabase.auth])
+
+    const baseUrl = email ? `/profile/${email}` : ""
+
     return (
         <Sidebar>
             <SidebarHeader />
@@ -23,24 +40,24 @@ export function AppSidebar() {
                 <SidebarGroup>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton asChild isActive={pathname === "/"}>
-                                <a href="/">
+                            <SidebarMenuButton asChild isActive={pathname === baseUrl}>
+                                <a href={baseUrl || "/"}>
                                     <Home className="size-4" />
                                     <span>Home</span>
                                 </a>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                         <SidebarMenuItem>
-                            <SidebarMenuButton asChild isActive={pathname.includes("/settings")}>
-                                <a href={pathname.includes("/settings") ? pathname : `${pathname}/settings`}>
+                            <SidebarMenuButton asChild isActive={pathname === `${baseUrl}/settings`}>
+                                <a href={baseUrl ? `${baseUrl}/settings` : "#"}>
                                     <Settings className="size-4" />
                                     <span>Settings</span>
                                 </a>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                         <SidebarMenuItem>
-                            <SidebarMenuButton asChild isActive={pathname.includes("/register-goal")}>
-                                <a href={pathname.includes("/register-goal") ? pathname : `${pathname}/register-goal`}>
+                            <SidebarMenuButton asChild isActive={pathname === `${baseUrl}/register-goal`}>
+                                <a href={baseUrl ? `${baseUrl}/register-goal` : "#"}>
                                     <PlusCircle className="size-4" />
                                     <span>Register Goal</span>
                                 </a>
