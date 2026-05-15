@@ -24,7 +24,11 @@ export default async function UserProfile({
   const { data } = await supabase.auth.getUser();
   const user = data.user;
   console.log(user);
-  const name = user?.user_metadata?.full_name ?? "Anonymous";
+  const username =
+    user?.user_metadata?.username ?? user?.email?.split("@")[0] ?? "Anonymous";
+  const bio =
+    user?.user_metadata?.bio ??
+    "Tell the community a little bit about yourself.";
   const avatar_url = user?.user_metadata?.avatar_url ?? "";
   const email = user?.email ?? "";
   const param = await params;
@@ -73,14 +77,14 @@ export default async function UserProfile({
             <Avatar className="h-16 w-16">
               <AvatarImage src={avatar_url} />
               <AvatarFallback>
-                {name.charAt(0).toUpperCase()}
+                {username.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
-              <div className="flex justify-between">
-                <CardTitle className="text-2xl">{name}</CardTitle>
+              <div className="flex flex-col gap-1">
+                <CardTitle className="text-2xl">{username}</CardTitle>
               </div>
-              <CardDescription>User Bio</CardDescription>
+              <CardDescription>{bio}</CardDescription>
             </div>
           </CardHeader>
         </Card>

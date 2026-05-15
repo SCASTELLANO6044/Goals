@@ -1,7 +1,8 @@
 "use client";
 
 import { Camera, X } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   FileUpload,
@@ -50,7 +51,36 @@ const SettingsProfile1 = ({
   },
   className,
 }: SettingsProfile1Props) => {
+  const router = useRouter();
   const [avatarFiles, setAvatarFiles] = useState<File[]>([]);
+  const [username, setUsername] = useState(defaultValues.username ?? "");
+  const [bio, setBio] = useState(defaultValues.bio ?? "");
+  const [status, setStatus] = useState<null | "saving" | "success" | "error">(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus("saving");
+    setError(null);
+
+    const response = await fetch("/api/profile", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, bio }),
+    });
+
+    if (!response.ok) {
+      const result = await response.json().catch(() => null);
+      setError(result?.error || "Unable to save profile data.");
+      setStatus("error");
+      return;
+    }
+
+    setStatus("success");
+    router.refresh();
+  };
 
   const initials = defaultValues.name
     ?.split(" ")
@@ -72,7 +102,8 @@ const SettingsProfile1 = ({
           Update your personal information and profile picture
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <CardContent className="space-y-6">
         {/* Avatar Upload */}
         <FileUpload
           value={avatarFiles}
@@ -144,8 +175,10 @@ const SettingsProfile1 = ({
             <Label htmlFor="username">Username</Label>
             <Input
               id="username"
+              name="username"
               placeholder="Enter username"
-              defaultValue={defaultValues.username}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
             />
           </div>
         </div>
@@ -154,19 +187,32 @@ const SettingsProfile1 = ({
           <Label htmlFor="bio">Bio</Label>
           <Textarea
             id="bio"
+            name="bio"
             placeholder="Tell us about yourself"
             rows={4}
-            defaultValue={defaultValues.bio}
+            value={bio}
+            onChange={(event) => setBio(event.target.value)}
           />
           <p className="text-xs text-muted-foreground">
             Brief description for your profile. Max 160 characters.
           </p>
         </div>
       </CardContent>
+      {status === "success" && (
+        <div className="px-4 text-sm text-green-600">Profile saved successfully.</div>
+      )}
+      {status === "error" && error && (
+        <div className="px-4 text-sm text-red-600">{error}</div>
+      )}
       <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline">Cancel</Button>
-        <Button>Save Changes</Button>
+        <Button variant="outline" type="reset">
+          Cancel
+        </Button>
+        <Button type="submit" disabled={status === "saving"}>
+          {status === "saving" ? "Saving..." : "Save Changes"}
+        </Button>
       </CardFooter>
+      </form>
     </Card>
   );
 };
