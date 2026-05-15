@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -10,7 +9,6 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { signOut } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { QueryData } from "@supabase/supabase-js";
