@@ -1,10 +1,20 @@
+"use client"
+
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from '@/components/ui/field'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
-const FormLayout = () => {
+type GoalOption = {
+  id: string | number
+  title: string
+}
+
+const FormLayout = ({ goals }: { goals: GoalOption[] }) => {
+  const [selectedGoal, setSelectedGoal] = useState('')
+
   return (
     <form>
       {/* Personal Information */}
@@ -14,26 +24,35 @@ const FormLayout = () => {
           <FieldDescription>Choose a new achieved goal.</FieldDescription>
         </div>
 
-        <FieldGroup className='grid grid-cols-1 gap-6 sm:grid-cols-1 md:col-span-1'>
-          <Field className='gap-2'>
+        <FieldGroup className='grid w-full grid-cols-1 gap-6 sm:grid-cols-1 md:col-span-1'>
+          <Field className='w-full gap-2'>
             <FieldLabel htmlFor='visibility'>Goal</FieldLabel>
-            <Select defaultValue='public'>
+            <Select value={selectedGoal} onValueChange={setSelectedGoal}>
               <SelectTrigger id='visibility' className='w-full'>
-                <SelectValue placeholder='Select visibility' />
+                <SelectValue placeholder='Select a goal' />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className='w-[var(--radix-select-trigger-width)]'>
                 <SelectGroup>
-                  <SelectItem value='public'>Public - Anyone can view</SelectItem>
-                  <SelectItem value='private'>Private - Only team members</SelectItem>
+                  {goals.length > 0 ? (
+                    goals.map((goal) => (
+                      <SelectItem key={goal.id} value={String(goal.id)}>
+                        {goal.title}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value='no-goals-available' disabled>
+                      No goals available
+                    </SelectItem>
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>
             <FieldDescription className='text-xs'>Choose among the available goals</FieldDescription>
           </Field>
 
-          <Field className='gap-2 sm:col-span-2'>
+          <Field className='w-full gap-2'>
             <FieldLabel htmlFor='goal-request-textarea'>Tell us why should we award you this goal.</FieldLabel>
-            <Textarea placeholder='Describe what have you accomplished to achieve this goal...' id='goal-request-textarea' rows={4} />
+            <Textarea className='w-full' placeholder='Describe what have you accomplished to achieve this goal...' id='goal-request-textarea' rows={4} />
             <FieldDescription className='text-xs'>
               This description is for internal use and won&apos;t be displayed publicly.
             </FieldDescription>
